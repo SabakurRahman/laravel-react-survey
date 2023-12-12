@@ -5,7 +5,7 @@ import Surveys from "./view/Surveys.jsx";
 import Login from "./view/Login.jsx";
 import Signup from "./view/Signup.jsx";
 import GuestLayout from "./component/GuestLayout.jsx";
-import DefaultLayout from "./component/DefaultLaout.jsx";
+import DefaultLayout from "./component/DefaultLayout.jsx";
 const router = createBrowserRouter([
     {
         path: "/",
