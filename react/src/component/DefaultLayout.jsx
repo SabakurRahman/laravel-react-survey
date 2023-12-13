@@ -1,30 +1,39 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+    Bars3Icon,
+    UserIcon,
+    BellIcon,
+    XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { NavLink, Outlet } from "react-router-dom";
+import { userStateContext } from "../context/ContextProvider";
 
-const user = {
-    name: "Tom Cook",
-    email: "tom@example.com",
-    imageUrl:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+// const user = {
+//     name: "Tom Cook",
+//     email: "tom@example.com",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+// };
 const navigation = [
     { name: "Dashboard", to: "/dashboard" },
     { name: "Survey", to: "/surveys" },
 ];
-const userNavigation = [{ name: "Sign out", href: "#" }];
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 export default function DefaultLayout() {
+    const { currentUser, token } = userStateContext();
 
-    const logout=(ev)=>{
+
+    console.log(currentUser.name);
+
+    const logout = (ev) => {
         ev.preventDefault();
         console.log("logout");
-    }
+    };
 
     return (
         <>
@@ -37,6 +46,7 @@ export default function DefaultLayout() {
         ```
       */}
             <div className="min-h-full">
+                {token}
                 <Disclosure as="nav" className="bg-gray-800">
                     {({ open }) => (
                         <>
@@ -56,7 +66,9 @@ export default function DefaultLayout() {
                                                     <NavLink
                                                         key={item.name}
                                                         to={item.to}
-                                                        className={({ isActive }) =>
+                                                        className={({
+                                                            isActive,
+                                                        }) =>
                                                             classNames(
                                                                 isActive
                                                                     ? "bg-gray-900 text-white"
@@ -98,11 +110,7 @@ export default function DefaultLayout() {
                                                         <span className="sr-only">
                                                             Open user menu
                                                         </span>
-                                                        <img
-                                                            className="h-8 w-8 rounded-full"
-                                                            src={user.imageUrl}
-                                                            alt=""
-                                                        />
+                                                        <UserIcon className="w-8 h-8 bg-black/25 rounded-full text-white"/>
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
@@ -115,16 +123,16 @@ export default function DefaultLayout() {
                                                     leaveTo="transform opacity-0 scale-95"
                                                 >
                                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-
-                                                                <Menu.Item>
-                                                                    <a href="#"
-                                                                    onClick={(ev) =>logout(ev)}>
-                                                                            sign out
-                                                                        </a>
-
-                                                                </Menu.Item>
-
-
+                                                        <Menu.Item>
+                                                            <a
+                                                                href="#"
+                                                                onClick={(ev) =>
+                                                                    logout(ev)
+                                                                }
+                                                            >
+                                                                sign out
+                                                            </a>
+                                                        </Menu.Item>
                                                     </Menu.Items>
                                                 </Transition>
                                             </Menu>
@@ -175,18 +183,14 @@ export default function DefaultLayout() {
                                 <div className="border-t border-gray-700 pb-3 pt-4">
                                     <div className="flex items-center px-5">
                                         <div className="flex-shrink-0">
-                                            <img
-                                                className="h-10 w-10 rounded-full"
-                                                src={user.imageUrl}
-                                                alt=""
-                                            />
+                                            <UserIcon />
                                         </div>
                                         <div className="ml-3">
                                             <div className="text-base font-medium leading-none text-white">
-                                                {user.name}
+                                                {currentUser.name}
                                             </div>
                                             <div className="text-sm font-medium leading-none text-gray-400">
-                                                {user.email}
+                                                {currentUser.email}
                                             </div>
                                         </div>
                                         <button
@@ -204,16 +208,15 @@ export default function DefaultLayout() {
                                         </button>
                                     </div>
                                     <div className="mt-3 space-y-1 px-2">
-                                        {userNavigation.map((item) => (
                                             <Disclosure.Button
-                                                key={item.name}
+
                                                 as="a"
-                                                href={item.href}
+                                                href="#"
                                                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                                             >
-                                                {item.name}
+
                                             </Disclosure.Button>
-                                        ))}
+
                                     </div>
                                 </div>
                             </Disclosure.Panel>
